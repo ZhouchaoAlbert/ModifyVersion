@@ -2,19 +2,19 @@
 
 #include "resource.h"
 #include "IniFile.h"
-#define  MIABUILD_PATH _T("F:\\MiaBuild\\miabuild.ini")
+#define  MIABUILD_PATH _T("D:\\mia-build\\mia-obs-pc-build\\ResInstall\\miabuild.ini")
 
 
 
-TCHAR szFileDiscription[256] = { _T("Copyright (C) 2014 六度人和。保留所有权利") };
-TCHAR szCompanyName[256] = { _T("Copyright (C) 2014 六度人和。保留所有权利") };
-TCHAR szFileVersion[256] = { _T("11.1.1.1") };
+TCHAR szFileDiscription[256] = { 0 };
+TCHAR szCompanyName[256] = { 0 };
+TCHAR szFileVersion[256] = { 0 };
 
-TCHAR szLegalCopyright[256] = { _T("Copyright (C) 2014 六度人和。保留所有权利") };
-TCHAR szOriginalFilename[256] = { _T("Copyright (C) 2014 六度人和。保留所有权利") };
-TCHAR szProductName[256] = { _T("Copyright (C) 2014 六度人和。保留所有权利") };
-TCHAR szInternalName[256] = { _T("Copyright (C) 2014 六度人和。保留所有权利") };
-TCHAR szProductVersion[256] = { _T("11.1.1.1") };
+TCHAR szLegalCopyright[256] = { 0 };
+TCHAR szOriginalFilename[256] = { 0 };
+TCHAR szProductName[256] = { 0 };
+TCHAR szInternalName[256] = { 0 };
+TCHAR szProductVersion[256] = { 0 };
 
 void ModifyRcW(LPCTSTR lpszRCFile)
 {
@@ -211,6 +211,7 @@ void ModifyRcA(LPCTSTR lpszRCFile)
 						strcpy_s(ptr, sizeof(szLine)-(ptr - szLine), "\"");
 						ptr++;
 						strcat_s(ptr, sizeof(szLine)-(ptr - szLine), W2A(szLegalCopyright));
+				
 						strcat_s(szLine, "\"\r");
 					}
 					else if (strstr(szLine, "VALUE \"InternalName\""))
@@ -278,30 +279,6 @@ void ModifyRcA(LPCTSTR lpszRCFile)
 	}
 }
 
-
-//
-// 通过扩展名判断是否是资源文件
-//
-bool IsRC(LPCTSTR lpszFile)
-{
-	TCHAR szDrive[_MAX_DRIVE] = { 0 };
-	TCHAR szDir[_MAX_DIR] = { 0 };
-	TCHAR szFName[_MAX_FNAME] = { 0 };
-	TCHAR szExt[_MAX_EXT] = { 0 };
-	errno_t err = 0;
-
-	_tsplitpath_s(lpszFile, szDrive, szDir, szFName, szExt);
-
-	if (_tcsnicmp(szExt, _T(".rc"), _MAX_EXT) == 0)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
 UINT16 GetFileHeader(LPCTSTR szConfFilePath)
 {
 	UINT16 head = 0;
@@ -356,10 +333,13 @@ void  ReadIniCommon()
 	rIniFile.GetStr(_T("Common"), _T("ProductName"), szProductName, MAX_PATH - 1);
 	rIniFile.GetStr(_T("Common"), _T("InternalName"), szInternalName, MAX_PATH - 1);
 
-	//nMajorVersion = rIniFile.GetInt(_T("Version"), _T("MajorVersion"));
-	//nMinorVersion = rIniFile.GetInt(_T("Version"), _T("MinorVersion"));
-	//nTinyVersion = rIniFile.GetInt(_T("Version"), _T("TinyVersion"));
-	//nPersonalVersion = rIniFile.GetInt(_T("Version"), _T("PersonalVersion"));
+	INT32 nMajorVersion = rIniFile.GetInt(_T("Version"), _T("MajorVersion"));
+	INT32 nMinorVersion = rIniFile.GetInt(_T("Version"), _T("MinorVersion"));
+	INT32 nTinyVersion = rIniFile.GetInt(_T("Version"), _T("TinyVersion"));
+	INT32 nPersonalVersion = rIniFile.GetInt(_T("Version"), _T("PersonalVersion"));
+
+	_stprintf_s(szFileVersion, _T("%d.%d.%d.%d"), nMajorVersion, nMinorVersion, nTinyVersion, nPersonalVersion);
+	_stprintf_s(szProductVersion, _T("%d.%d.%d.%d"), nMajorVersion, nMinorVersion, nTinyVersion, nPersonalVersion);
 }
 
 

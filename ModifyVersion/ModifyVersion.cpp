@@ -8,7 +8,6 @@
 #define new DEBUG_NEW
 #endif
 
-
 // 唯一的应用程序对象
 
 CWinApp theApp;
@@ -34,7 +33,7 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 		{
 			// TODO:  在此处为应用程序的行为编写代码。
 			ReadIniCommon();
-			ModifySingleRC(_T("F:\\MiaBuild\\Main.rc"));
+			ModifySingleRC(_T("D:\\mia-build\\mia-obs-src-pc-main\\UI\\obs.rc"));
 		}
 	}
 	else
